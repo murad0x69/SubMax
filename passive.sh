@@ -1,11 +1,11 @@
 #!/bin/bash
 #input_file="listdomains.txt"
 
-domain=$1
 
-subdomain(){
-
-mkdir -p output_passive_subdomains/$domain
+# Function to process each domain
+subdomain() {
+    domain=$1
+    mkdir -p output_passive_subdomains/$domain
 
 echo "🔁 Started Subfinder"
 subfinder -d $domain -silent -all -recursive -o output_passive_subdomains/$domain/subfinder.txt >/dev/null 2>&1;
