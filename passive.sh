@@ -8,11 +8,11 @@ subdomain(){
 mkdir -p output_passive_subdomains/$domain
 
 echo "🔁 Started Subfinder"
-subfinder -d $domain -silent -all -recursive > output_passive_subdomains/$domain/subfinder.txt >/dev/null 2>&1;
+subfinder -d $domain -silent -all -recursive -o output_passive_subdomains/$domain/subfinder.txt >/dev/null 2>&1;
 printf "✅ Total subfinder-subdomains   :  $(wc -l output_passive_subdomains/$domain/subfinder.txt)\n\n"
 
 echo "🔁 Started subdominator"
-subdominator -d $domain  > ououtput_passive_subdomains/$domain/subdominator.txt  >/dev/null 2>&1;
+subdominator -d $domain -o ououtput_passive_subdomains/$domain/subdominator.txt  >/dev/null 2>&1;
 printf "✅ Total subdominator   :  $(wc -l output_passive_subdomains/$domain/subdominator.txt)\n\n"
 
 echo "🔁 Started assetfinder"
@@ -120,8 +120,23 @@ echo "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 }
 subdomain 
+# Display help message
+usage() {
+    echo "Usage: $0 [-d domain] [-l domain_list_file] [-h]"
+    echo
+    echo "Options:"
+    echo "  -d <domain>        Process a single domain."
+    echo "  -l <domain_list_file>  Process domains from a file, one per line."
+    echo "  -h                  Display this help message."
+    echo
+    echo "Example:"
+    echo "  $0 -d example.com"
+    echo "  $0 -l listdomains.txt"
+    exit 1
+}
+
 # Parse command-line arguments
-while getopts "d:l:" opt; do
+while getopts "d:l:h" opt; do
     case $opt in
         d)
             domain=$OPTARG
@@ -135,9 +150,16 @@ while getopts "d:l:" opt; do
                 subdomain "$domain"
             done < "$input_file"
             ;;
+        h)
+            usage
+            ;;
         *)
-            echo "Usage: $0 [-d domain] [-l domain_list_file]"
-            exit 1
+            usage
             ;;
     esac
 done
+
+# If no arguments are passed, show usage
+if [ $OPTIND -eq 1 ]; then
+    usage
+fi
