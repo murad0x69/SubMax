@@ -12,7 +12,7 @@ subfinder -d $domain  -all -recursive -o output_passive_subdomains/$domain/subfi
 printf "✅ Total subfinder-subdomains   :  $(wc -l output_passive_subdomains/$domain/subfinder.txt)\n\n"
 
 echo "🔁 Started subdominator"
-subdominator -d $domain  -o ououtput_passive_subdomains/$domain/subdominator.txt  >/dev/null  
+subdominator -d $domain  -o output_passive_subdomains/$domain/subdominator.txt  >/dev/null  
 printf "✅ Total subdominator   :  $(wc -l output_passive_subdomains/$domain/subdominator.txt)\n\n" 
 
 echo "🔁 Started assetfinder"
@@ -23,7 +23,7 @@ echo "🔁 Start riddler.io"
 curl -s "https://riddler.io/search/exportcsv?q=pld:$domain" | grep -Po "(([\w.-]*)\.([\w]*)\.([A-z]))\w+" | sort -u > output_passive_subdomains/$domain/riddler.txt >/dev/null  
 printf "✅ Total riddler-subdomains     :  $(wc -l output_passive_subdomains/$domain/riddler.txt)\n\n" 
 echo "🔁 Started Amass"                           ### add your config.ini location
-amass enum -passive -norecursive -config $HOME/.config/amass/config/config.ini -d $domain > output_passive_subdomains/$domain/amass.txt >/dev/null  
+amass enum -passive -norecursive  -d $domain > output_passive_subdomains/$domain/amass.txt >/dev/null  
 printf "✅ Total amass-subdomains       :  $(wc -l output_passive_subdomains/$domain/amass.txt)\n\n"  
 
 echo "🔁 Started WaybackMachine"
@@ -43,7 +43,7 @@ findomain -t $domain --unique-output output_passive_subdomains/$domain/findomain
 printf "✅ Total findomain                   :  $(wc -l output_passive_subdomains/$domain/findomain.txt)\n\n" 
 
 echo "🔁 Started rapiddns"
-curl -s "https://rapiddns.io/subdomain/$domain?full=1#result" | ggrep "<td><a" | cut -d '"' -f 2 | grep http | cut -d '/' -f3 | sed 's/#results//g' | sort -u > output_passive_subdomains/$domain/rapiddns.txt >/dev/null  
+curl -s "https://rapiddns.io/subdomain/$domain?full=1#result" | grep "<td><a" | cut -d '"' -f 2 | grep http | cut -d '/' -f3 | sed 's/#results//g' | sort -u > output_passive_subdomains/$domain/rapiddns.txt >/dev/null  
 printf "✅ Total rapiddns                   :  $(wc -l output_passive_subdomains/$domain/rapiddns.txt)\n\n"  
 
 echo "🔁 Started github-subdomains"
